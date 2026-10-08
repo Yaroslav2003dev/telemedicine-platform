@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Централизованная дистанционная система медицинского обслуживания</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+</head>
+<body>
+<nav class="navbar navbar-bg fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-text" href="#">Централизованная дистанционная система медицинского обслуживания</a>
+
+        <div class="nav-toggle">
+            <div class="nav-toggle-bar"></div>
+        </div>
+
+        <nav id="nav" class="nav">
+            <ul>
+                <li><a href="/patient">Личный кабинет</a></li>
+                <li><a href="/patient/doctors/search">Список врачей</a></li>
+                <li><a href="/patient/patient-care-for-patient">Запись</a></li>
+                <li><a href="https://t.me/Medical_Assistant99_bot">Ассистент с ИИ</a></li>
+                <li>
+                    <form id="logoutForm" action="/logout" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <a href="#" onclick="document.getElementById('logoutForm').submit(); return false;">Выход</a>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</nav>
+      
+      <div class="container-main d-flex justify-content-center ">
+        <div th:each="doctor : ${doctor}" class="vrach-card-all d-flex flex-column align-items-center">
+
+            <div class="card vrach-card-content justify-content-center mb-5 ">
+                <div class="card-body d-flex">
+                  <div class="content-image pt-3 pb-3">
+                    <img class="fit-picture" src="/images/Vector%201.svg" alt="image" />
+                  </div>
+                  <div  class="content-text">
+                    <div  class="vrach-card-name d-flex pt-1 pe-2 pt-3">
+                      <p class="lastname" th:text="${doctor.lastname}">Толкач</p>
+                      <p class="firstname" th:text="${doctor.firstname}">Ярослав</p>
+                      <p class="patronymic" th:text="${doctor.patronymic}">Игоревич</p>
+                    </div>
+                    <p class="card-spec pt-5" th:text="'Специальность: '+${doctor.speciality}">Специальность: Хирург</p>
+                    <p class="card-stag" th:text="'Стаж: '+${doctor.experience}+' лет'">Стаж: 5 лет</p>
+                  </div>
+               
+                </div>
+            </div>
+          
+            <div class="card vrach-card-details justify-content-center">
+              <div th:each="exp : ${doctor.workExperiences}" class="card-body">
+                  <h3 class="ps-3 pt-2">С чем поможет:</h3>
+                  <p class="help ps-3 pe-3 border-bottom" th:text="${doctor.description}">Диагностика и лечение доброкачественных и злокачественных опухолей молочной железы, пищевода, желудка, двенадцатиперстной кишки, поджелудочной железы, тонкой и толстой кишки, кожи и мягких тканей, нейроэндокринных опухолей, дивертикулярной болезни толстой кишки, желчнокаменной болезни, грыж передней брюшной стенки, грыж пищеводного отверстия диафрагмы.</p>
+                  <h3 class="ps-3">Опыт работы:</h3>
+                  <ul class="ps-3 work-experience border-bottom">
+                    <li class="work-experience-prof" th:text="${exp.position}">Врач-хирург</li>
+                    <li class="work-experience-location" th:text="${exp.organization}">Детская городская поликлиника №61 ДЗМ</li>
+                    <li class="work-experience-city" th:text="${exp.years}">2022 - 2024, г. Москва</li>
+                  </ul>
+              </div>
+                  <h3 class="ps-3">Образование:</h3>
+                  <ul th:each="edu : ${doctor.educations}" class="ps-3 education border-bottom">
+                    <li class="education-prof" th:text="${edu.direction}">Базовое по специальности «Лечебное дело»</li>
+                    <li th:text="${edu.university}">ГОУ ВПО "Российский государственный медицинский университет Федерального агентства по здравоохранению и социальному развитию"</li>
+                    <li th:text="${edu.year}">2009, г. Москва</li>
+                  </ul>
+                  <h3 class="ps-3">Повышение квалификации:</h3>
+                  <ul class="ps-3 training" th:each="training : ${doctor.trainings}">
+                    <li class="training-prof" th:text="${training.program}">Хирургия</li>
+                    <li th:text="${training.institution}">Первый Московский государственный медицинский университет имени И.М. Сеченова</li>
+                    <li th:text="${training.year}">2020, Москва</li>
+                  </ul>
+
+
+            </div>
+          </div>
+      </div>
+        
+        
+        <script src="/js/script.js"></script>
+</body>
+</html>

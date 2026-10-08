@@ -1,0 +1,48 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <tem:GetAvaibleAppointments>
+         <tem:idDoc>718</tem:idDoc>
+         <tem:idLpu>175</tem:idLpu>
+         <tem:visitStart>2026-05-24T23:59:59</tem:visitStart>
+         <tem:visitEnd>2026-06-24T23:59:59</tem:visitEnd>
+         <tem:guid>2E61FBF1-D434-4A6F-9ACF-010FF98CBB02</tem:guid>
+      </tem:GetAvaibleAppointments>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <s:Body>
+      <GetAvaibleAppointmentsResponse xmlns="http://tempuri.org/">
+         <GetAvaibleAppointmentsResult xmlns:d4p1="http://schemas.datacontract.org/2004/07/HubService2" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d4p1:ErrorList/>
+            <d4p1:IdHistory i:nil="true"/>
+            <d4p1:Success>true</d4p1:Success>
+            <d4p1:ListAppointments>
+               <d4p1:Appointment>
+                  <d4p1:Address>198095, г. Санкт-Петербург, ул. Косинова, д. 17</d4p1:Address>
+                  <d4p1:IdAppointment>20260611180000000718</d4p1:IdAppointment>
+                  <d4p1:Num>3</d4p1:Num>
+                  <d4p1:Room>24</d4p1:Room>
+                  <d4p1:VisitEnd>2026-06-11T18:14:59</d4p1:VisitEnd>
+                  <d4p1:VisitStart>2026-06-11T18:00:00</d4p1:VisitStart>
+               </d4p1:Appointment>
+               <d4p1:Appointment>
+                  <d4p1:Address>198095, г. Санкт-Петербург, ул. Косинова, д. 17</d4p1:Address>
+                  <d4p1:IdAppointment>20260611183000000718</d4p1:IdAppointment>
+                  <d4p1:Num>5</d4p1:Num>
+                  <d4p1:Room>24</d4p1:Room>
+                  <d4p1:VisitEnd>2026-06-11T18:44:59</d4p1:VisitEnd>
+                  <d4p1:VisitStart>2026-06-11T18:30:00</d4p1:VisitStart>
+               </d4p1:Appointment>
+            </d4p1:ListAppointments>
+            <d4p1:MedicalOrganization i:nil="true" xmlns:d5p1="http://schemas.datacontract.org/2004/07/HubService2.ContractsClasses.ProxyAndReturn"/>
+            <d4p1:MedicalResource i:nil="true" xmlns:d5p1="http://schemas.datacontract.org/2004/07/HubService2.ContractsClasses.ProxyAndReturn"/>
+            <d4p1:NextAvailableDate i:nil="true" xmlns:d5p1="http://schemas.datacontract.org/2004/07/HubService2.ContractsClasses.ProxyAndReturn"/>
+            <d4p1:NotAvailableReasonCode i:nil="true"/>
+            <d4p1:VisitInfo i:nil="true" xmlns:d5p1="http://schemas.datacontract.org/2004/07/HubService2.ContractsClasses.ProxyAndReturn"/>
+         </GetAvaibleAppointmentsResult>
+      </GetAvaibleAppointmentsResponse>
+   </s:Body>
+</s:Envelope>

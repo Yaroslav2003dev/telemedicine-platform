@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <title>Централизованная дистанционная система медицинского обслуживания</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  <style>
+    /* Ограничение по ширине для форм редактирования */
+    #edit-mode-content input,
+    #edit-mode-details textarea {
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-bg fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-text" href="#">Централизованная дистанционная система медицинского обслуживания</a>
+
+    <div class="nav-toggle">
+      <div class="nav-toggle-bar"></div>
+    </div>
+
+    <nav id="nav" class="nav">
+      <ul>
+        <li><a href="/doctor">Личный кабинет</a></li>
+        <li><a href="/doctor/patient-care-for-doctor">Обслуживание пациента</a></li>
+        <li><a href="/doctor/patients/search">Картотека</a></li>
+        <li><a href="https://t.me/Medical_Assistant99_bot">Ассистент с ИИ</a></li>
+        <li>
+          <form id="logoutForm" action="/logout" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <a href="#" onclick="document.getElementById('logoutForm').submit(); return false;">Выход</a>
+          </form>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</nav>
+
+<div class="container-main d-flex justify-content-center">
+  <div class="vrach-card-all d-flex flex-column align-items-center">
+
+    <!-- Блок с ФИО, специальностью и стажем (vrach-card-content) -->
+    <div class="card vrach-card-content justify-content-center mb-5">
+      <div class="card-body d-flex">
+        <div class="content-image pt-3 pb-3">
+          <img class="fit-picture" src="/images/Vector%201.svg" alt="image" />
+        </div>
+        <div class="content-text">
+          <input type="hidden" id="doctor-id" th:value="${doctor.id}" />
+
+          <!-- Режим просмотра -->
+          <div id="view-mode-content">
+            <div class="vrach-card-name d-flex pt-1 pe-2 pt-3">
+              <p class="lastname" >Толкач</p>
+              <p class="firstname" >Ярослав</p>
+              <p class="patronymic">Игоревич</p>
+            </div>
+            <p class="card-spec pt-5">Специальность: <span id="speciality-view">Хирург</span></p>
+            <p class="card-stag">Стаж: <span id="experience-view">5 лет</span></p>
+            <button type="button" class="doctor-lk-edit btn btn-warning" id="edit-content-btn">Редактировать</button>
+          </div>
+          <!-- Режим редактирования -->
+          <div id="edit-mode-content" class="d-none">
+            <!-- Оборачиваем поля ввода в блоки для корректного позиционирования -->
+            <div class="mb-3 vrach-card-name d-flex pt-1 pe-2 pt-3">
+              <div class="me-2">
+                <label for="lastname-input">Фамилия:</label>
+                <input type="text" class="form-control" id="lastname-input" value="" />
+              </div>
+              <div class="me-2">
+                <label for="firstname-input">Имя:</label>
+                <input type="text" class="form-control" id="firstname-input" value="" />
+              </div>
+              <div>
+                <label for="patronymic-input">Отчество:</label>
+                <input type="text" class="form-control" id="patronymic-input" value="" />
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="speciality-input">Специальность:</label>
+              <input type="text" class="form-control" id="speciality-input" value="" />
+            </div>
+            <div class="mb-3">
+              <label for="experience-input">Стаж:</label>
+              <div class="input-group">
+                <input type="number" class="form-control" id="experience-input" value="" />
+                <span class="input-group-text">лет</span>
+              </div>
+            </div>
+            <button type="button" class="btn btn-success" id="save-content-btn">Сохранить</button>
+            <button type="button" class="btn btn-secondary" id="cancel-content-btn">Отмена</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Блок с описанием, опытом работы, образованием и повышением квалификации (vrach-card-details) -->
+    <div class="card vrach-card-details justify-content-center">
+      <div class="card-body">
+        <!-- Режим просмотра -->
+        <div id="view-mode-details">
+          <h3 class="ps-3 pt-2">С чем поможет:</h3>
+          <p class="help ps-3 pe-3 border-bottom" id="help-view">
+            Диагностика и лечение доброкачественных и злокачественных опухолей молочной железы, пищевода, желудка, двенадцатиперстной кишки, поджелудочной железы, тонкой и толстой кишки, кожи и мягких тканей, нейроэндокринных опухолей, дивертикулярной болезни толстой кишки, желчнокаменной болезни, грыж передней брюшной стенки, грыж пищеводного отверстия диафрагмы.
+          </p>
+          <h3 class="ps-3">Опыт работы:</h3>
+          <ul class="ps-3 work-experience border-bottom" id="work-view">
+            <li class="work-experience-prof">Врач-хирург</li>
+            <li class="work-experience-location">Детская городская поликлиника №61 ДЗМ</li>
+            <li class="work-experience-years">2022 - 2024</li>
+          </ul>
+          <h3 class="ps-3">Образование:</h3>
+          <ul class="ps-3 education border-bottom" id="education-view">
+            <li class="education-prof">Базовое по специальности «Лечебное дело»</li>
+            <li class="education-prof-location">ГОУ ВПО "Российский государственный медицинский университет Федерального агентства по здравоохранению и социальному развитию"</li>
+            <li class="education-prof-years">2009</li>
+          </ul>
+          <h3 class="ps-3">Повышение квалификации:</h3>
+          <ul class="ps-3 training" id="training-view">
+            <li class="training-prof">Хирургия</li>
+            <li class="training-prof-location">Первый Московский государственный университет имени И.М. Сеченова</li>
+            <li class="training-prof-years">2020</li>
+          </ul>
+          <button type="button" class="doctor-lk-edit btn btn-warning" id="edit-details-btn">Редактировать</button>
+        </div>
+        <!-- Режим редактирования -->
+        <div id="edit-mode-details" class="d-none">
+          <div class="mb-3">
+            <h3 class="ps-3 pt-2">С чем поможет:</h3>
+            <textarea class="form-control" id="help-input" rows="3"></textarea>
+          </div>
+          <!-- Опыт работы: контейнер для динамических блоков -->
+          <div class="mb-3">
+            <h3 class="ps-3">Опыт работы:</h3>
+            <div id="work-edit-container"></div>
+            <button type="button" class="btn btn-info mt-2" id="add-work-btn">Добавить опыт работы</button>
+          </div>
+          <!-- Образование: контейнер для динамических блоков -->
+          <div class="mb-3">
+            <h3 class="ps-3">Образование:</h3>
+            <div id="education-edit-container"></div>
+            <button type="button" class="btn btn-info mt-2" id="add-education-btn">Добавить образование</button>
+          </div>
+          <!-- Повышение квалификации: контейнер для динамических блоков -->
+          <div class="mb-3">
+            <h3 class="ps-3">Повышение квалификации:</h3>
+            <div id="training-edit-container"></div>
+            <button type="button" class="btn btn-info mt-2" id="add-training-btn">Добавить повышение квалификации</button>
+          </div>
+          <button type="button" class="btn btn-success" id="save-details-btn">Сохранить</button>
+          <button type="button" class="btn btn-secondary" id="cancel-details-btn">Отмена</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Шаблоны для динамических блоков -->
+<!-- Шаблон для блока "Опыт работы" -->
+<template id="work-block-template">
+  <div class="work-block mb-2 border p-2">
+    <div class="mb-1">
+      <label>Профессия:</label>
+      <input type="text" class="form-control work-prof-input" >
+    </div>
+    <div class="mb-1">
+      <label>Место работы:</label>
+      <input type="text" class="form-control work-location-input" >
+    </div>
+    <div class="mb-1">
+      <label>Годы:</label>
+      <input type="text" class="form-control work-years-input" >
+    </div>
+    <button type="button" class="btn btn-danger btn-sm remove-work-btn">Удалить</button>
+  </div>
+</template>
+
+<!-- Шаблон для блока "Образование" -->
+<template id="education-block-template">
+  <div class="education-block mb-2 border p-2">
+    <div class="mb-1">
+      <label>Направление/Название:</label>
+      <input type="text" class="form-control education-prof-input">
+    </div>
+    <div class="mb-1">
+      <label>Учебное заведение:</label>
+      <input type="text" class="form-control education-location-input">
+    </div>
+    <div class="mb-1">
+      <label>Год выпуска:</label>
+      <input type="text" class="form-control education-years-input">
+    </div>
+    <button type="button" class="btn btn-danger btn-sm remove-education-btn">Удалить</button>
+  </div>
+</template>
+
+<!-- Шаблон для блока "Повышение квалификации" -->
+<template id="training-block-template">
+  <div class="training-block mb-2 border p-2">
+    <div class="mb-1">
+      <label>Программа/Курс:</label>
+      <input type="text" class="form-control training-prof-input">
+    </div>
+    <div class="mb-1">
+      <label>Учебное заведение:</label>
+      <input type="text" class="form-control training-location-input">
+    </div>
+    <div class="mb-1">
+      <label>Год:</label>
+      <input type="text" class="form-control training-years-input">
+    </div>
+    <button type="button" class="btn btn-danger btn-sm remove-training-btn">Удалить</button>
+  </div>
+</template>
+
+<script src="/js/script.js"></script>
+<!-- Скрипт для переключения режимов редактирования и динамического добавления блоков -->
+<script>
+  // Режим редактирования основного контента (ФИО, специальность, стаж)
+  const viewModeContent = document.getElementById('view-mode-content');
+  const editModeContent = document.getElementById('edit-mode-content');
+  const editContentBtn = document.getElementById('edit-content-btn');
+  const saveContentBtn = document.getElementById('save-content-btn');
+  const cancelContentBtn = document.getElementById('cancel-content-btn');
+
+  const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+
+  console.log(csrfToken)
+
+  editContentBtn.addEventListener('click', () => {
+    // При входе в режим редактирования подставляем существующие данные в поля (не даем им стать пустыми)
+    document.getElementById('lastname-input').value = document.querySelector('.lastname').textContent;
+    document.getElementById('firstname-input').value = document.querySelector('.firstname').textContent;
+    document.getElementById('patronymic-input').value = document.querySelector('.patronymic').textContent;
+    document.getElementById('speciality-input').value = document.getElementById('speciality-view').textContent;
+    document.getElementById('experience-input').value = document.getElementById('experience-view').textContent.replace(' лет','');
+
+    viewModeContent.classList.add('d-none');
+    editModeContent.classList.remove('d-none');
+  });
+
+  cancelContentBtn.addEventListener('click', () => {
+    editModeContent.classList.add('d-none');
+    viewModeContent.classList.remove('d-none');
+  });
+
+  saveContentBtn.addEventListener('click', () => {
+    // Обновляем текст в режиме просмотра, не затрагивая классы
+    document.querySelector('.lastname').textContent = document.getElementById('lastname-input').value;
+    document.querySelector('.firstname').textContent = document.getElementById('firstname-input').value;
+    document.querySelector('.patronymic').textContent = document.getElementById('patronymic-input').value;
+    document.getElementById('speciality-view').textContent = document.getElementById('speciality-input').value;
+    document.getElementById('experience-view').textContent = document.getElementById('experience-input').value + ' лет';
+
+    editModeContent.classList.add('d-none');
+    viewModeContent.classList.remove('d-none');
+    saveDoctorData();
+
+  });
+
+  // Режим редактирования деталей (описание, списки)
+  const viewModeDetails = document.getElementById('view-mode-details');
+  const editModeDetails = document.getElementById('edit-mode-details');
+  const editDetailsBtn = document.getElementById('edit-details-btn');
+  const saveDetailsBtn = document.getElementById('save-details-btn');
+  const cancelDetailsBtn = document.getElementById('cancel-details-btn');
+
+  // При нажатии на "Редактировать" для деталей подставляем уже имеющуюся информацию в блоки редактирования
+  editDetailsBtn.addEventListener('click', () => {
+    // Подставляем "С чем поможет"
+    document.getElementById('help-input').value = document.getElementById('help-view').textContent.trim();
+
+    // Для "Опыт работы": читаем из списка view-mode и создаём блоки в work-edit-container
+    const workViewItems = Array.from(document.querySelectorAll('#work-view li'));
+    const workEditContainer = document.getElementById('work-edit-container');
+    workEditContainer.innerHTML = "";
+    for (let i = 0; i < workViewItems.length; i += 3) {
+      const defaultData = {
+        prof: workViewItems[i] ? workViewItems[i].textContent : "",
+        location: workViewItems[i+1] ? workViewItems[i+1].textContent : "",
+        years: workViewItems[i+2] ? workViewItems[i+2].textContent : ""
+      };
+      addWorkBlock(defaultData);
+    }
+
+    // Для "Образование"
+    const eduViewItems = Array.from(document.querySelectorAll('#education-view li'));
+    const eduEditContainer = document.getElementById('education-edit-container');
+    eduEditContainer.innerHTML = "";
+    for (let i = 0; i < eduViewItems.length; i += 3) {
+      const defaultData = {
+        prof: eduViewItems[i] ? eduViewItems[i].textContent : "",
+        location: eduViewItems[i+1] ? eduViewItems[i+1].textContent : "",
+        years: eduViewItems[i+2] ? eduViewItems[i+2].textContent : ""
+      };
+      addEducationBlock(defaultData);
+    }
+
+    // Для "Повышение квалификации"
+    const trainViewItems = Array.from(document.querySelectorAll('#training-view li'));
+    const trainEditContainer = document.getElementById('training-edit-container');
+    trainEditContainer.innerHTML = "";
+    for (let i = 0; i < trainViewItems.length; i += 3) {
+      const defaultData = {
+        prof: trainViewItems[i] ? trainViewItems[i].textContent : "",
+        location: trainViewItems[i+1] ? trainViewItems[i+1].textContent : "",
+        years: trainViewItems[i+2] ? trainViewItems[i+2].textContent : ""
+      };
+      addTrainingBlock(defaultData);
+    }
+
+    viewModeDetails.classList.add('d-none');
+    editModeDetails.classList.remove('d-none');
+  });
+
+  cancelDetailsBtn.addEventListener('click', () => {
+    editModeDetails.classList.add('d-none');
+    viewModeDetails.classList.remove('d-none');
+  });
+
+  // Функции для динамического добавления блоков
+  function addWorkBlock(defaultData) {
+    const template = document.getElementById('work-block-template').content.cloneNode(true);
+    // Если переданы данные, заполняем поля, иначе оставляем пустыми
+    if (defaultData) {
+      template.querySelector('.work-prof-input').value = defaultData.prof;
+      template.querySelector('.work-location-input').value = defaultData.location;
+      template.querySelector('.work-years-input').value = defaultData.years;
+    }
+    // Если defaultData отсутствует – поля останутся пустыми
+    template.querySelector('.remove-work-btn').addEventListener('click', function() {
+      this.parentElement.remove();
+    });
+    document.getElementById('work-edit-container').appendChild(template);
+  }
+
+  function addEducationBlock(defaultData) {
+    const template = document.getElementById('education-block-template').content.cloneNode(true);
+    if (defaultData) {
+      template.querySelector('.education-prof-input').value = defaultData.prof;
+      template.querySelector('.education-location-input').value = defaultData.location;
+      template.querySelector('.education-years-input').value = defaultData.years;
+    }
+    template.querySelector('.remove-education-btn').addEventListener('click', function() {
+      this.parentElement.remove();
+    });
+    document.getElementById('education-edit-container').appendChild(template);
+  }
+
+  function addTrainingBlock(defaultData) {
+    const template = document.getElementById('training-block-template').content.cloneNode(true);
+    if (defaultData) {
+      template.querySelector('.training-prof-input').value = defaultData.prof;
+      template.querySelector('.training-location-input').value = defaultData.location;
+      template.querySelector('.training-years-input').value = defaultData.years;
+    }
+    template.querySelector('.remove-training-btn').addEventListener('click', function() {
+      this.parentElement.remove();
+    });
+    document.getElementById('training-edit-container').appendChild(template);
+  }
+
+  // Обработчики кнопок добавления блоков – новые блоки будут добавляться пустыми
+  document.getElementById('add-work-btn').addEventListener('click', () => {
+    addWorkBlock(); // без defaultData – поля будут пустыми
+  });
+  document.getElementById('add-education-btn').addEventListener('click', () => {
+    addEducationBlock();
+  });
+  document.getElementById('add-training-btn').addEventListener('click', () => {
+    addTrainingBlock();
+  });
+
+  // При сохранении деталей обновляем режим просмотра для списков
+  saveDetailsBtn.addEventListener('click', () => {
+    // Обновляем текст для "С чем поможет"
+    document.getElementById('help-view').textContent = document.getElementById('help-input').value;
+
+    // Обновляем список "Опыт работы"
+    const workEditContainer = document.getElementById('work-edit-container');
+    const workView = document.getElementById('work-view');
+    workView.innerHTML = ""; // очищаем существующий список
+    workEditContainer.querySelectorAll('.work-block').forEach(block => {
+      const prof = block.querySelector('.work-prof-input').value;
+      const location = block.querySelector('.work-location-input').value;
+      const years = block.querySelector('.work-years-input').value;
+      const liProf = document.createElement('li');
+      liProf.className = "work-experience-prof";
+      liProf.textContent = prof;
+      const liLocation = document.createElement('li');
+      liLocation.className = "work-experience-location";
+      liLocation.textContent = location;
+      const liYears = document.createElement('li');
+      liYears.className = "work-experience-years";
+      liYears.textContent = years;
+      workView.appendChild(liProf);
+      workView.appendChild(liLocation);
+      workView.appendChild(liYears);
+    });
+
+    // Обновляем список "Образование"
+    const educationEditContainer = document.getElementById('education-edit-container');
+    const educationView = document.getElementById('education-view');
+    educationView.innerHTML = "";
+    educationEditContainer.querySelectorAll('.education-block').forEach(block => {
+      const prof = block.querySelector('.education-prof-input').value;
+      const location = block.querySelector('.education-location-input').value;
+      const years = block.querySelector('.education-years-input').value;
+      const liProf = document.createElement('li');
+      liProf.className = "education-prof";
+      liProf.textContent = prof;
+      const liLocation = document.createElement('li');
+      liLocation.className = "education-prof-location";
+      liLocation.textContent = location;
+      const liYears = document.createElement('li');
+      liYears.className = "education-prof-years";
+      liYears.textContent = years;
+      educationView.appendChild(liProf);
+      educationView.appendChild(liLocation);
+      educationView.appendChild(liYears);
+    });
+
+    // Обновляем список "Повышение квалификации"
+    const trainingEditContainer = document.getElementById('training-edit-container');
+    const trainingView = document.getElementById('training-view');
+    trainingView.innerHTML = "";
+    trainingEditContainer.querySelectorAll('.training-block').forEach(block => {
+      const prof = block.querySelector('.training-prof-input').value;
+      const location = block.querySelector('.training-location-input').value;
+      const years = block.querySelector('.training-years-input').value;
+      const liProf = document.createElement('li');
+      liProf.className = "training-prof";
+      liProf.textContent = prof;
+      const liLocation = document.createElement('li');
+      liLocation.className = "training-prof-location";
+      liLocation.textContent = location;
+      const liYears = document.createElement('li');
+      liYears.className = "training-prof-years";
+      liYears.textContent = years;
+      trainingView.appendChild(liProf);
+      trainingView.appendChild(liLocation);
+      trainingView.appendChild(liYears);
+    });
+
+    editModeDetails.classList.add('d-none');
+    viewModeDetails.classList.remove('d-none');
+
+    // Здесь можно добавить AJAX-запрос для сохранения данных на сервере
+    saveDoctorData();
+
+  });
+  function saveDoctorData() {
+    const doctorData = {
+      firstname: document.getElementById('firstname-input').value,
+      lastname: document.getElementById('lastname-input').value,
+      patronymic: document.getElementById('patronymic-input').value,
+      speciality: document.getElementById('speciality-input').value,
+      experience: document.getElementById('experience-input').value,
+      // experience_text: document.getElementById('experience-input').value + ' лет',
+      description: document.getElementById('help-input').value,
+      workExperiences: Array.from(document.querySelectorAll('.work-block')).map(workBlock => ({
+        position: workBlock.querySelector('.work-prof-input').value,
+        organization: workBlock.querySelector('.work-location-input').value,
+        years: workBlock.querySelector('.work-years-input').value
+      })),
+      educations: Array.from(document.querySelectorAll('.education-block')).map(educationBlock => ({
+        direction: educationBlock.querySelector('.education-prof-input').value,
+        university: educationBlock.querySelector('.education-location-input').value,
+        year: educationBlock.querySelector('.education-years-input').value
+      })),
+      trainings: Array.from(document.querySelectorAll('.training-block')).map(trainingBlock => ({
+        program: trainingBlock.querySelector('.training-prof-input').value,
+        institution: trainingBlock.querySelector('.training-location-input').value,
+        year: trainingBlock.querySelector('.training-years-input').value
+      }))
+    };
+
+
+    // const doctorId = parseInt(document.getElementById('doctor-id').value);
+    const doctorId = document.getElementById('doctor-id').value;
+  console.log(doctorData.workExperiences);
+
+    console.log("Докторские данные перед отправкой:", JSON.stringify(doctorData));
+    fetch('/api/doctors/' + doctorId, {
+      method: 'PUT', // Используем PUT для обновления данных
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': csrfToken
+      },
+      body: JSON.stringify(doctorData) // Отправляем данные в формате JSON
+    })
+            .then(response => response.json())
+            .then(data => {
+              // Обработка успешного ответа
+              alert('Доктор успешно обновлен!');
+              console.log("Отправились:",data)
+              // Вы можете обновить вид страницы с новыми данными или что-то еще
+            })
+            .catch(error => {
+              console.error('Ошибка:', error);
+              alert('Не удалось обновить данные.');
+            });
+  }
+//Загрузка данных из сервера
+  document.addEventListener('DOMContentLoaded', function () {
+    loadDoctorData();
+  });
+
+  function loadDoctorData() {
+    const doctorId = document.getElementById('doctor-id').value;
+    fetch('/api/doctors/' + doctorId)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Ошибка при получении данных');
+              }
+              return response.json();
+            })
+            .then(data => {
+              console.log('Полученные данные:', data);
+
+              // Заполняем основные данные врача
+              document.querySelector('.lastname').textContent = data.lastname || 'Не указано';
+              document.querySelector('.firstname').textContent = data.firstname || 'Не указано';
+              document.querySelector('.patronymic').textContent = data.patronymic || 'Не указано';
+              document.getElementById('speciality-view').textContent = data.speciality || 'Не указано';
+              document.getElementById('experience-view').textContent = data.experience ? data.experience + ' лет' : 'Не указано';
+              document.getElementById('help-view').textContent = data.description || 'Нет информации';
+
+              // Заполняем списки с восстановленными классами
+              updateListView('work-view', data.workExperiences || [], 'work-experience-prof', 'work-experience-location', 'work-experience-years', 'position', 'organization', 'years');
+              updateListView('education-view', data.educations || [], 'education-prof', 'education-prof-location', 'education-prof-years', 'direction', 'university', 'year');
+              updateListView('training-view', data.trainings || [], 'training-prof', 'training-prof-location', 'training-prof-years', 'program', 'institution', 'year');
+            })
+            .catch(error => {
+              console.error('Ошибка загрузки данных врача:', error);
+              alert('Ошибка при загрузке данных врача.');
+            });
+  }
+
+  // Универсальная функция для заполнения списка с правильными классами
+  function updateListView(elementId, items, class1, class2, class3, field1, field2, field3) {
+    const list = document.getElementById(elementId);
+    list.innerHTML = ''; // Очищаем список
+    items.forEach(item => {
+      list.innerHTML += `
+            <li class="${class1}">${item[field1] || 'Не указано'}</li>
+            <li class="${class2}">${item[field2] || 'Не указано'}</li>
+            <li class="${class3}">${item[field3] || 'Не указано'}</li>
+        `;
+    });
+  }
+
+  // Запускаем загрузку данных при загрузке страницы
+  document.addEventListener('DOMContentLoaded', function () {
+    loadDoctorData();
+  });
+
+
+</script>
+<!--<script src="script.js"></script>-->
+</body>
+</html>

@@ -1,0 +1,586 @@
+/* imports */
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro");
+/* colors */
+/* variables */
+/* mixins */
+/* resets and base styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+
+.card-body{
+  padding: 0;
+  /*min-width: 400px;*/
+}
+
+html {
+  /* background: #4729a3; */
+  color: white;
+  font: normal 10px/1.42857 "Source Sans Pro", Helvetica, Arial, sans-serif;
+}
+
+p{
+  margin-bottom: 0px;
+}
+
+a {
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+a:hover {
+  opacity: 0.8;
+}
+
+/* nav toggle */
+.nav-toggle {
+  cursor: pointer;
+  /* height: 2.5rem; */
+  right: 3rem;
+  left: auto;
+  position: fixed;
+  top: 3rem;
+  width: 3.5rem;
+  z-index: 2;
+}
+.nav-toggle:hover {
+  opacity: 0.8;
+}
+.nav-toggle .nav-toggle-bar,
+.nav-toggle .nav-toggle-bar::after,
+.nav-toggle .nav-toggle-bar::before {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: white;
+  content: "";
+  height: 0.5rem;
+  transition: all 0.5s;
+  width: 100%;
+}
+.nav-toggle .nav-toggle-bar {
+  margin-top: 0;
+}
+.nav-toggle .nav-toggle-bar::after {
+  margin-top: 1rem;
+}
+.nav-toggle .nav-toggle-bar::before {
+  margin-top: -1rem;
+}
+.nav-toggle.expanded .nav-toggle-bar {
+  background: transparent;
+}
+.nav-toggle.expanded .nav-toggle-bar::after, .nav-toggle.expanded .nav-toggle-bar::before {
+  background: white;
+  margin-top: 0;
+}
+.nav-toggle.expanded .nav-toggle-bar::after {
+  transform: rotate(45deg);
+}
+.nav-toggle.expanded .nav-toggle-bar::before {
+  transform: rotate(-45deg);
+}
+
+/* nav */
+.nav {
+  background: rgba(20, 156, 184, 0.9);
+  box-shadow: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  font-size: 25px;
+  height: 100vh;
+  right: -300px;
+  left: auto;
+  padding: 6rem 1px 3rem 60px;
+  position: fixed;
+  top: 0;
+  transition: box-shadow 0.5s, right 0.5s;
+  width: 300px;
+  z-index: 1;
+}
+.nav.expanded {
+  box-shadow: 0 0 1rem 1rem rgba(0, 0, 0, 0.125);
+  right: 0;
+  left: auto;
+}
+.nav ul {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  list-style: none;
+  margin: auto 0;
+  padding-right: 30px;
+}/*# sourceMappingURL=style.css.map */
+
+/* Я писал */
+.navbar-bg {
+  background-color: #12a8de
+}
+
+.navbar-text{
+  color: aliceblue;
+  font-size: 20px;
+}
+/* .container-fluid a:hover {
+  color: #002bb6;
+} */
+
+.container-fluid{
+  min-height: 48px;
+}
+
+a {
+  text-decoration: none;
+}
+ul, ul li{
+  list-style-type: none;
+  padding-left: 0px;
+  margin-bottom: 0px;
+}
+
+.offcanvas-title{
+  color: #14b1ff;
+}
+
+.nav-link-active{
+  color: #002bb6;
+  border-bottom: 2px solid currentColor;
+  display: inline-block;
+  line-height: 0.85;
+}
+
+.navbar-toggler:focus{
+  box-shadow: none;
+}
+
+/* CONTAINER-MAIN */
+
+.container-main {
+  margin-top: 120px;
+}
+
+.cards-area{
+  max-width: 780px;
+  min-height: 800px;
+}
+
+/* .cards-vrach{
+  max-width: 780px;
+  min-height: 800px;
+} */
+
+/* Личная карточка врача */
+
+.vrach-card-all{
+  /* max-width: 200px; */
+}
+
+.vrach-card-name{
+  font-weight: 500;
+}
+
+.vrach-card-name .lastname{
+  padding-right: 5px;
+  font-size: 20px;
+}
+
+.vrach-card-name .firstname{
+  padding-right: 5px;
+  font-size: 20px;
+}
+
+.vrach-card-name .patronymic{
+  padding-right: 9px;
+  font-size: 20px;
+
+}
+
+.vrach-card-content .content-text{
+  font-size: 15px;
+}
+
+.vrach-card-content{
+  max-width: 500px;
+}
+
+.vrach-card-details{
+  min-width: 700px;
+  max-width: 700px;
+}
+
+.work-experience{
+  font-size: 15px;
+  
+}
+
+.border-bottom{
+  border-bottom: 1px solid;
+  padding: 0;
+}
+
+.education{
+  font-size: 15px;
+}
+
+.training{
+  font-size: 15px;
+}
+
+.help{
+  font-size: 15px;
+}
+
+.work-experience-prof{
+  font-weight: 600;
+}
+
+.education-prof{
+  font-weight: 600;
+}
+
+.training-prof{
+  font-weight: 600;
+}
+
+/* Картотека */
+
+
+.patient-card-content .content-text{
+  font-size: 15px;
+  min-width: 400px;
+  /* max-width: 400px; */
+}
+
+/* .patient-card-content{
+  max-width: 500px;
+} */
+
+.patient-card-name{
+  font-weight: 400;
+}
+
+.patient-card-name .lastname{
+  padding-right: 5px;
+  font-size: 20px;
+}
+
+.patient-card-name .firstname{
+  padding-right: 5px;
+  font-size: 20px;
+}
+
+.patient-card-name .patronymic{
+  padding-right: 9px;
+  font-size: 20px;
+
+}
+
+.patient-card-age{
+  font-size: 20px;
+  white-space: nowrap;
+}
+
+/* .card-filter{
+  max-width: 400px;
+} */
+
+/*Фильтрация*/
+.card-filter-name{
+  min-width: 300px;
+  margin-right: 30px;
+}
+
+/*  */
+
+.card-filter-age{
+  min-width: 70px;
+}
+
+.form-control{
+padding: 5px 3px;
+}
+
+.container-filter {
+  margin-top: 120px;
+  width: 1400px;
+  align-items: center;
+}
+
+/* .cards-input-patient{
+  max-width: 370px;
+} */
+ 
+/*ЛК пациента*/
+.patient-lk-card-content{
+  margin-left: 70px;
+  border-color: black;
+}
+
+.patient-content-text{
+  /*min-width: 300px;*/
+  /*max-width: 400px;*/
+  padding: 1px 3px;
+}
+
+.patient-mydata{
+  min-width: 300px;
+  max-width: 400px;
+}
+
+.patient-content-image{
+  border-bottom: 1px solid;
+}
+
+.patient-card-content{
+  border: 1px solid;
+}
+
+.patient-contacts{
+  border-top: 1px solid;
+}
+
+.patient-contacts{
+font-size: 18px;
+}
+
+.patient-mydata{
+  border-top: 1px solid;
+  font-size: 18px;
+}
+
+.patient-events{
+  /* margin-left: 350px; */
+}
+
+.events-patient{
+  min-width: 900px;
+}
+
+.events{
+  
+  /* margin-left: 350px; */
+  font-size: 25px;
+  font-weight: 500;
+}
+
+.patient-card-document{
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.patient-document-text{
+  min-width: 200px;
+}
+
+.patient-document-title{
+
+}
+
+.patient-date{
+  border-left: 1px solid;
+}
+
+.patient-document-all{
+  margin-top: 30px;
+}
+
+/* Протокол консультации */
+
+.container-cons{
+  margin-top: 150px;
+
+}
+
+.table-cons{
+  border: 1px solid;
+  width: 600px;
+}
+
+.row-cons{
+  border: 1px solid;
+}
+
+.a-case-cons{
+  font-weight: 700;
+  border: 1px solid;
+  font-size: 18px;
+  text-align: center;
+  width: 200px;
+}
+
+.ab-case-cons{
+  font-weight: 700;
+  border: 1px solid;
+  font-size: 18px;
+  text-align: center;
+  width: 300px;
+}
+
+.b-case-cons{
+  font-weight: 600;
+  border: 1px solid;
+  font-size: 15px;
+  padding-left: 10px;
+}
+
+.c-case-cons{
+  border: 1px solid;
+  font-size: 15px;
+  font-weight: 500;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-wrap: wrap;
+}
+
+.fio-cons{
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.filter-buttons{
+  margin-top: 16px;
+}
+
+/* Карточка врача */
+.filter-vrach-content{
+  width: 300px;
+  min-height: 170px;
+}
+
+.filter-vrach-text{
+  border-left: 1px solid rgb(113, 124, 253);
+  display: flex;
+  flex: 1;
+}
+
+.filter-vrach-text-details{
+  flex: 1;
+  max-height: 30px;
+  color: #1d38d0;
+  flex-wrap: wrap;
+  padding: 10px 5px;
+}
+h5{
+  font-size: 11px;
+}
+
+.filter-vrach-text-fio{
+  margin-top: 14px;
+  /* border-bottom: 1px solid; */
+  max-width: 190px;
+  flex-wrap: wrap;
+  color: #3450ea;
+  padding: 0px 8px;
+}
+
+.container-main {
+
+  margin-top: 120px;
+}
+
+.filter-vrach-cards{
+  /* display: block; */
+  /* text-align: start; */
+  /* align-self: flex-start; */
+  max-width: 670px;
+
+}
+
+.filter-vrach-card{
+  border: 1px solid rgb(113, 124, 253);
+}
+
+.fio-border-bottom{
+  text-align: center;
+}
+
+.filter-button-block{
+  border-top: 1px solid rgb(113, 124, 253);
+}
+
+.filter-vrach-img-q{
+  width: 110px;
+}
+
+.filter-vrach-img{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+
+
+
+.form-control {
+  border: 1px solid rgb(101, 101, 255) !important; /* Переопределяем стандартный стиль */
+}
+
+.label-filter-speciality{
+  color: rgb(101, 101, 255);
+}
+
+.label-filter-middleName{
+  color: rgb(101, 101, 255);
+}
+
+.label-filter-firstName{
+  color: rgb(101, 101, 255);
+}
+
+.label-filter-lastName{
+  color: rgb(101, 101, 255);
+}
+
+
+/* Кнопка редактирования ЛК у пациента */
+.patient-edit{
+  border-top: 1px solid;
+}
+
+/* Форма для регистрации */
+
+.form-regis{
+  margin-top: 120px;
+  width: 320px;
+  /* height: 250px;  */
+  border: 2px solid blue;
+}
+
+.form-regis-title{
+  font-size: 20px;
+  border-bottom: 2px solid blue;
+  color: rgb(28, 12, 249);
+  text-align: center;
+  padding: 5px;
+}
+
+.form-regis form input{
+  border: 1px solid blue;
+}
+
+
+.InputPassword{
+  color: rgb(28, 12, 249);
+  font-size: 15px;
+}
+
+.InputEmail{
+  color: rgb(28, 12, 249);
+  font-size: 15px;
+}
+
+.container-reg-login{
+  width: 100%;
+}
+
+.register-group-open{
+  margin-top: 35px;
+  text-decoration: underline blue;
+  color: #1d38d0;
+}

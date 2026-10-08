@@ -1,0 +1,23 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <tem:GetDoctorList2>
+         <tem:idLpu>175</tem:idLpu>
+         <tem:fedIdPosition>53</tem:fedIdPosition>
+         <tem:guid>2E61FBF1-D434-4A6F-9ACF-010FF98CBB02</tem:guid>
+      </tem:GetDoctorList2>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <s:Body>
+      <GetDoctorList2Response xmlns="http://tempuri.org/">
+         <GetDoctorList2Result xmlns:d4p1="http://schemas.datacontract.org/2004/07/HubService2" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d4p1:ErrorList/>
+            <d4p1:IdHistory i:nil="true"/>
+            <d4p1:Success>true</d4p1:Success>
+            <d4p1:Docs/>
+         </GetDoctorList2Result>
+      </GetDoctorList2Response>
+   </s:Body>
+</s:Envelope>
